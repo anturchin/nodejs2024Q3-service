@@ -13,3 +13,8 @@ export const ErrorArtistMessages = {
   INVALID_ARTIST_ID_FORMAT: 'Invalid artist ID format',
   ARTIST_NOT_FOUND: 'Artist not found',
 };
+
+export const ErrorAlbumMessages = {
+  INVALID_ALBUM_ID_FORMAT: 'Invalid album ID format',
+  ALBUM_NOT_FOUND: 'Album not found',
+};

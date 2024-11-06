@@ -4,12 +4,14 @@ import { Artist } from './entities/artist.entity';
 import { CreateArtistDto } from './dtos/create-artist.dto';
 import { UpdateArtistDto } from './dtos/update-artist.dto';
 import { TrackService } from '../track/track.service';
+import { AlbumService } from '../album/album.service';
 
 @Injectable()
 export class ArtistService {
   constructor(
     private readonly artistRepository: ArtistRepository,
     private readonly trackService: TrackService,
+    private readonly albumService: AlbumService,
   ) {}
 
   async getAllArtists(): Promise<Artist[]> {
@@ -34,5 +36,6 @@ export class ArtistService {
   async deleteArtist(id: string): Promise<void> {
     await this.artistRepository.deleteArtist(id);
     await this.trackService.resetArtistAndAlbumId({ artistId: id });
+    await this.albumService.resetArtisId(id);
   }
 }
