@@ -1,5 +1,5 @@
 import { v4 as uuidv4, validate as isUuid } from 'uuid';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { Album } from './entities/album.entity';
 import { ErrorAlbumMessages } from '../common/constants/error-messages.constants';
 import { CreateAlbumDto } from './dtos/create-album.dto';
@@ -20,7 +20,7 @@ export class AlbumRepository {
 
     const album = this.albums.find((album) => album.id === id);
     if (!album) {
-      throw new BadRequestException(ErrorAlbumMessages.ALBUM_NOT_FOUND);
+      throw new NotFoundException(ErrorAlbumMessages.ALBUM_NOT_FOUND);
     }
     return album;
   }
@@ -43,7 +43,7 @@ export class AlbumRepository {
     }
     const album = this.albums.find((album) => album.id === id);
     if (!album) {
-      throw new BadRequestException(ErrorAlbumMessages.ALBUM_NOT_FOUND);
+      throw new NotFoundException(ErrorAlbumMessages.ALBUM_NOT_FOUND);
     }
 
     Object.assign(album, updateAlbumDto);
@@ -56,7 +56,7 @@ export class AlbumRepository {
     }
     const index = this.albums.findIndex((album) => album.id === id);
     if (index === -1) {
-      throw new BadRequestException(ErrorAlbumMessages.ALBUM_NOT_FOUND);
+      throw new NotFoundException(ErrorAlbumMessages.ALBUM_NOT_FOUND);
     }
     this.albums.splice(index, 1);
   }
