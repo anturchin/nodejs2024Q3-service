@@ -59,10 +59,27 @@ export class TrackRepository {
     if (!isUuid(id)) {
       throw new BadRequestException(ErrorTrackMessages.INVALID_TRACK_ID_FORMAT);
     }
-    const track = this.tracks.findIndex((track) => track.id === id);
-    if (track === -1) {
+    const index = this.tracks.findIndex((track) => track.id === id);
+    if (index === -1) {
       throw new NotFoundException(ErrorTrackMessages.TRACK_NOT_FOUND);
     }
-    this.tracks.splice(track, 1);
+    this.tracks.splice(index, 1);
+  }
+
+  async resetArtistAndAlbumId({
+    artistId,
+    albumId,
+  }: {
+    artistId?: string;
+    albumId?: string;
+  }): Promise<void> {
+    this.tracks.forEach((track) => {
+      if (track.artistId === artistId) {
+        track.artistId = null;
+      }
+      if (track.albumId === albumId) {
+        track.albumId = null;
+      }
+    });
   }
 }

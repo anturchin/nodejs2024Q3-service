@@ -30,4 +30,14 @@ export class TrackService {
   async deleteTrack(id: string): Promise<void> {
     await this.trackRepository.deleteTrack(id);
   }
+
+  async resetArtistAndAlbumId({
+    albumId,
+    artistId,
+  }: {
+    artistId?: string;
+    albumId?: string;
+  }) {
+    await this.trackRepository.resetArtistAndAlbumId({ albumId, artistId });
+  }
 }

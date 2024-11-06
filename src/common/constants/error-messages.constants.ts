@@ -8,3 +8,8 @@ export const ErrorTrackMessages = {
   INVALID_TRACK_ID_FORMAT: 'Invalid track ID format',
   TRACK_NOT_FOUND: 'Track not found',
 };
+
+export const ErrorArtistMessages = {
+  INVALID_ARTIST_ID_FORMAT: 'Invalid artist ID format',
+  ARTIST_NOT_FOUND: 'Artist not found',
+};
