@@ -18,3 +18,16 @@ export const ErrorAlbumMessages = {
   INVALID_ALBUM_ID_FORMAT: 'Invalid album ID format',
   ALBUM_NOT_FOUND: 'Album not found',
 };
+
+export const ErrorFavoritesMessages = {
+  INVALID_FAVORITES_TRACK_ID_FORMAT: 'trackId is invalid',
+  INVALID_FAVORITES_ALBUM_ID_FORMAT: 'albumId is invalid',
+  INVALID_FAVORITES_ARTIST_ID_FORMAT: 'albumId is invalid',
+  FAVORITES_TRACK_NOT_FOUND: 'Track not found in favorites',
+  FAVORITES_ALBUM_NOT_FOUND: 'Album not found in favorites',
+  FAVORITES_ARTIST_NOT_FOUND: 'Album not found in favorites',
+};
+
+export const ErrorCommonMessage = {
+  INTERNET_SERVER_ERROR: 'Internal server error',
+};

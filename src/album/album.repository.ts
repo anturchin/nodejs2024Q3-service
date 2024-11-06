@@ -1,5 +1,9 @@
 import { v4 as uuidv4, validate as isUuid } from 'uuid';
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Album } from './entities/album.entity';
 import { ErrorAlbumMessages } from '../common/constants/error-messages.constants';
 import { CreateAlbumDto } from './dtos/create-album.dto';
@@ -67,5 +71,13 @@ export class AlbumRepository {
         album.artistId = null;
       }
     });
+  }
+
+  async albumExists(id: string): Promise<boolean> {
+    const index = this.albums.findIndex((album) => album.id === id);
+    if (index === -1) {
+      return false;
+    }
+    return true;
   }
 }

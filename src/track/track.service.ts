@@ -40,4 +40,8 @@ export class TrackService {
   }) {
     await this.trackRepository.resetArtistAndAlbumId({ albumId, artistId });
   }
+
+  async trackExists(id: string): Promise<boolean> {
+    return await this.trackRepository.trackExists(id);
+  }
 }

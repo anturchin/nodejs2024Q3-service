@@ -73,4 +73,12 @@ export class ArtistRepository {
 
     this.artists.splice(index, 1);
   }
+
+  async artistExists(id: string): Promise<boolean> {
+    const index = this.artists.findIndex((artis) => artis.id === id);
+    if (index === -1) {
+      return false;
+    }
+    return true;
+  }
 }

@@ -82,4 +82,12 @@ export class TrackRepository {
       }
     });
   }
+
+  async trackExists(id: string): Promise<boolean> {
+    const index = this.tracks.findIndex((track) => track.id === id);
+    if (index === -1) {
+      return false;
+    }
+    return true;
+  }
 }
