@@ -9,12 +9,29 @@ import { UserResponseDto } from './dtos/user-response.dto';
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async getAllUsers(): Promise<User[]> {
-    return await this.userRepository.getAllUsers();
+  async getAllUsers(): Promise<UserResponseDto[]> {
+    const users: User[] = await this.userRepository.getAllUsers();
+    const usersWithoutPassword: UserResponseDto[] = users.map(
+      ({ id, login, version, createdAt, updatedAt }: User) => ({
+        id,
+        login,
+        version,
+        createdAt,
+        updatedAt,
+      }),
+    );
+    return usersWithoutPassword;
   }
 
-  async getUserById(id: string): Promise<User> {
-    return await this.userRepository.getUserById(id);
+  async getUserById(id: string): Promise<UserResponseDto> {
+    const {
+      id: userId,
+      login,
+      version,
+      updatedAt,
+      createdAt,
+    } = await this.userRepository.getUserById(id);
+    return { id: userId, login, version, updatedAt, createdAt };
   }
 
   async createUser(createUserDto: CreateUserDto): Promise<UserResponseDto> {

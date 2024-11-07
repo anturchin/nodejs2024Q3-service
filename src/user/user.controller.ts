@@ -12,7 +12,6 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdatePasswordDto } from './dtos/update-password.dto';
-import { User } from './entities/user.entity';
 import { ErrorHandler } from '../common/utils/error-handler.util';
 import { UserResponseDto } from './dtos/user-response.dto';
 
@@ -22,13 +21,13 @@ export class UserController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  async getAllUsers(): Promise<User[]> {
+  async getAllUsers(): Promise<UserResponseDto[]> {
     return await this.userService.getAllUsers();
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  async getUserById(@Param('id') id: string): Promise<User> {
+  async getUserById(@Param('id') id: string): Promise<UserResponseDto> {
     try {
       return await this.userService.getUserById(id);
     } catch (error) {
