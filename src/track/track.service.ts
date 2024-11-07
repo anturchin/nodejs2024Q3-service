@@ -3,10 +3,14 @@ import { Track } from './entities/track.entity';
 import { CreateTrackDto } from './dtos/create-track.dto';
 import { UpdateTrackDto } from './dtos/update-track.dto';
 import { Injectable } from '@nestjs/common';
+import { FavoritesService } from '../favorites/favorites.service';
 
 @Injectable()
 export class TrackService {
-  constructor(private readonly trackRepository: TrackRepository) {}
+  constructor(
+    private readonly trackRepository: TrackRepository,
+    private readonly favoritesService: FavoritesService,
+  ) {}
 
   async getAllTracks(): Promise<Track[]> {
     return await this.trackRepository.getAllTracks();
@@ -29,6 +33,10 @@ export class TrackService {
 
   async deleteTrack(id: string): Promise<void> {
     await this.trackRepository.deleteTrack(id);
+    await this.favoritesService.handleEntityDeletion({
+      id,
+      entityType: 'tracks',
+    });
   }
 
   async resetArtistAndAlbumId({

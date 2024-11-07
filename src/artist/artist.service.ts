@@ -5,6 +5,7 @@ import { CreateArtistDto } from './dtos/create-artist.dto';
 import { UpdateArtistDto } from './dtos/update-artist.dto';
 import { TrackService } from '../track/track.service';
 import { AlbumService } from '../album/album.service';
+import { FavoritesService } from '../favorites/favorites.service';
 
 @Injectable()
 export class ArtistService {
@@ -12,6 +13,7 @@ export class ArtistService {
     private readonly artistRepository: ArtistRepository,
     private readonly trackService: TrackService,
     private readonly albumService: AlbumService,
+    private readonly favoritesService: FavoritesService,
   ) {}
 
   async getAllArtists(): Promise<Artist[]> {
@@ -37,5 +39,9 @@ export class ArtistService {
     await this.artistRepository.deleteArtist(id);
     await this.trackService.resetArtistAndAlbumId({ artistId: id });
     await this.albumService.resetArtisId(id);
+    await this.favoritesService.handleEntityDeletion({
+      id,
+      entityType: 'artists',
+    });
   }
 }
