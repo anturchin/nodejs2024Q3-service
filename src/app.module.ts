@@ -4,15 +4,9 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { ArtistModule } from './artist/artist.module';
-import { FavoritesModule } from './favorites/favorites.module';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
-    UserModule,
-    ArtistModule,
-    FavoritesModule,
-  ],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), UserModule, ArtistModule],
   controllers: [AppController],
   providers: [AppService],
 })

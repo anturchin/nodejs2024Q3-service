@@ -39,8 +39,4 @@ export class AlbumService {
   async resetArtisId(artistId: string): Promise<void> {
     await this.albumRepository.resetArtisId(artistId);
   }
-
-  async albumExists(id: string): Promise<boolean> {
-    return await this.albumRepository.albumExists(id);
-  }
 }

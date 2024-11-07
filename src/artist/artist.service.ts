@@ -38,8 +38,4 @@ export class ArtistService {
     await this.trackService.resetArtistAndAlbumId({ artistId: id });
     await this.albumService.resetArtisId(id);
   }
-
-  async artistExists(id: string): Promise<boolean> {
-    return await this.artistRepository.artistExists(id);
-  }
 }
