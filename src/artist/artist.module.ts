@@ -9,6 +9,6 @@ import { ArtistRepository } from './artist.repository';
   imports: [TrackModule, AlbumModule],
   controllers: [ArtistController],
   providers: [ArtistService, ArtistRepository],
-  exports: [ArtistService],
+  exports: [ArtistService, ArtistRepository],
 })
 export class ArtistModule {}

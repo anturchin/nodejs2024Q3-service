@@ -6,9 +6,6 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { Favorites } from './entities/favorite.entity';
-import { TrackService } from '../track/track.service';
-import { AlbumService } from '../album/album.service';
-import { ArtistService } from '../artist/artist.service';
 import { FavoritesResponseDto } from './dtos/favorites-response.dto';
 import {
   ErrorAlbumMessages,
@@ -16,6 +13,9 @@ import {
   ErrorFavoritesMessages,
   ErrorTrackMessages,
 } from '../common/constants/error-messages.constants';
+import { TrackRepository } from '../track/track.repository';
+import { AlbumRepository } from '../album/album.repository';
+import { ArtistRepository } from '../artist/artist.repository';
 
 @Injectable()
 export class FavoritesRepository {
@@ -26,15 +26,15 @@ export class FavoritesRepository {
   };
 
   constructor(
-    private readonly trackService: TrackService,
-    private readonly albumService: AlbumService,
-    private readonly artistService: ArtistService,
+    private readonly trackRepository: TrackRepository,
+    private readonly albumRepository: AlbumRepository,
+    private readonly artistRepository: ArtistRepository,
   ) {}
 
   async getAllFavorites(): Promise<FavoritesResponseDto> {
-    const artistsAll = await this.artistService.getAllArtists();
-    const albumsAll = await this.albumService.getAllAlbums();
-    const tracksAll = await this.trackService.getAllTracks();
+    const artistsAll = await this.artistRepository.getAllArtists();
+    const albumsAll = await this.albumRepository.getAllAlbums();
+    const tracksAll = await this.trackRepository.getAllTracks();
 
     const artists = artistsAll.filter((artist) =>
       this.favorites.artists.includes(artist.id),
@@ -53,7 +53,9 @@ export class FavoritesRepository {
     await this.addToFavorites({
       entityType: 'tracks',
       id,
-      entityExistsCheck: this.trackService.trackExists.bind(this.trackService),
+      entityExistsCheck: this.trackRepository.trackExists.bind(
+        this.trackRepository,
+      ),
       invalidIdMessage:
         ErrorFavoritesMessages.INVALID_FAVORITES_TRACK_ID_FORMAT,
       notFoundMessage: ErrorTrackMessages.TRACK_NOT_FOUND,
@@ -74,8 +76,8 @@ export class FavoritesRepository {
     await this.addToFavorites({
       entityType: 'artists',
       id,
-      entityExistsCheck: this.artistService.artistExists.bind(
-        this.artistService,
+      entityExistsCheck: this.artistRepository.artistExists.bind(
+        this.artistRepository,
       ),
       invalidIdMessage:
         ErrorFavoritesMessages.INVALID_FAVORITES_ARTIST_ID_FORMAT,
@@ -97,7 +99,9 @@ export class FavoritesRepository {
     await this.addToFavorites({
       entityType: 'albums',
       id,
-      entityExistsCheck: this.albumService.albumExists.bind(this.albumService),
+      entityExistsCheck: this.albumRepository.albumExists.bind(
+        this.albumRepository,
+      ),
       invalidIdMessage:
         ErrorFavoritesMessages.INVALID_FAVORITES_ALBUM_ID_FORMAT,
       notFoundMessage: ErrorAlbumMessages.ALBUM_NOT_FOUND,
