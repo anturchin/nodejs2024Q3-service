@@ -1,5 +1,4 @@
-import { v4 as uuidv4, validate as isUuid } from 'uuid';
-import { Track } from './entities/track.entity';
+import { validate as isUuid } from 'uuid';
 import {
   BadRequestException,
   Injectable,
@@ -8,13 +7,15 @@ import {
 import { ErrorTrackMessages } from '../common/constants/error-messages.constants';
 import { CreateTrackDto } from './dtos/create-track.dto';
 import { UpdateTrackDto } from './dtos/update-track.dto';
+import { Track } from '@prisma/client';
+import { DatabaseService } from '../database/database.service';
 
 @Injectable()
 export class TrackRepository {
-  private readonly tracks: Track[] = [];
+  constructor(private readonly db: DatabaseService) {}
 
   async getAllTracks(): Promise<Track[]> {
-    return this.tracks;
+    return this.db.track.findMany();
   }
 
   async getTrackById(id: string): Promise<Track> {
@@ -22,7 +23,7 @@ export class TrackRepository {
       throw new BadRequestException(ErrorTrackMessages.INVALID_TRACK_ID_FORMAT);
     }
 
-    const track = this.tracks.find((track) => track.id === id);
+    const track = await this.db.track.findUnique({ where: { id } });
     if (!track) {
       throw new NotFoundException(ErrorTrackMessages.TRACK_NOT_FOUND);
     }
@@ -30,13 +31,9 @@ export class TrackRepository {
   }
 
   async createTrack(createTrackDto: CreateTrackDto): Promise<Track> {
-    const newTrack: Track = {
-      id: uuidv4(),
-      ...createTrackDto,
-    };
-
-    this.tracks.push(newTrack);
-    return newTrack;
+    return this.db.track.create({
+      data: createTrackDto,
+    });
   }
 
   async updateTrack(
@@ -46,24 +43,25 @@ export class TrackRepository {
     if (!isUuid(id)) {
       throw new BadRequestException(ErrorTrackMessages.INVALID_TRACK_ID_FORMAT);
     }
-    const track = this.tracks.find((track) => track.id === id);
+    const track = await this.db.track.findUnique({ where: { id } });
     if (!track) {
       throw new NotFoundException(ErrorTrackMessages.TRACK_NOT_FOUND);
     }
-
-    Object.assign(track, updateTrackDto);
-    return track;
+    return this.db.track.update({
+      where: { id },
+      data: updateTrackDto,
+    });
   }
 
   async deleteTrack(id: string): Promise<void> {
     if (!isUuid(id)) {
       throw new BadRequestException(ErrorTrackMessages.INVALID_TRACK_ID_FORMAT);
     }
-    const index = this.tracks.findIndex((track) => track.id === id);
-    if (index === -1) {
+    const track = await this.db.track.findUnique({ where: { id } });
+    if (!track) {
       throw new NotFoundException(ErrorTrackMessages.TRACK_NOT_FOUND);
     }
-    this.tracks.splice(index, 1);
+    await this.db.track.delete({ where: { id } });
   }
 
   async resetArtistAndAlbumId({
@@ -73,21 +71,22 @@ export class TrackRepository {
     artistId?: string;
     albumId?: string;
   }): Promise<void> {
-    this.tracks.forEach((track) => {
-      if (track.artistId === artistId) {
-        track.artistId = null;
-      }
-      if (track.albumId === albumId) {
-        track.albumId = null;
-      }
-    });
+    if (artistId) {
+      await this.db.track.updateMany({
+        where: { artistId },
+        data: { artistId: null },
+      });
+    }
+    if (albumId) {
+      await this.db.track.updateMany({
+        where: { albumId },
+        data: { albumId: null },
+      });
+    }
   }
 
   async trackExists(id: string): Promise<boolean> {
-    const index = this.tracks.findIndex((track) => track.id === id);
-    if (index === -1) {
-      return false;
-    }
-    return true;
+    const track = await this.db.track.findUnique({ where: { id } });
+    return !!track;
   }
 }

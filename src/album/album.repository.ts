@@ -1,20 +1,21 @@
-import { v4 as uuidv4, validate as isUuid } from 'uuid';
+import { validate as isUuid } from 'uuid';
 import {
   BadRequestException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Album } from './entities/album.entity';
 import { ErrorAlbumMessages } from '../common/constants/error-messages.constants';
 import { CreateAlbumDto } from './dtos/create-album.dto';
 import { UpdateAlbumDto } from './dtos/update-album.dto';
+import { Album } from '@prisma/client';
+import { DatabaseService } from '../database/database.service';
 
 @Injectable()
 export class AlbumRepository {
-  private readonly albums: Album[] = [];
+  constructor(private readonly db: DatabaseService) {}
 
   async getAllAlbums(): Promise<Album[]> {
-    return this.albums;
+    return this.db.album.findMany();
   }
 
   async getAlbumById(id: string): Promise<Album> {
@@ -22,7 +23,7 @@ export class AlbumRepository {
       throw new BadRequestException(ErrorAlbumMessages.INVALID_ALBUM_ID_FORMAT);
     }
 
-    const album = this.albums.find((album) => album.id === id);
+    const album = await this.db.album.findUnique({ where: { id } });
     if (!album) {
       throw new NotFoundException(ErrorAlbumMessages.ALBUM_NOT_FOUND);
     }
@@ -30,11 +31,11 @@ export class AlbumRepository {
   }
 
   async createAlbum(createAlbumDto: CreateAlbumDto): Promise<Album> {
-    const newAlbum: Album = {
-      id: uuidv4(),
-      ...createAlbumDto,
-    };
-    this.albums.push(newAlbum);
+    const newAlbum = await this.db.album.create({
+      data: {
+        ...createAlbumDto,
+      },
+    });
     return newAlbum;
   }
 
@@ -45,39 +46,36 @@ export class AlbumRepository {
     if (!isUuid(id)) {
       throw new BadRequestException(ErrorAlbumMessages.INVALID_ALBUM_ID_FORMAT);
     }
-    const album = this.albums.find((album) => album.id === id);
+    const album = await this.db.album.findUnique({ where: { id } });
     if (!album) {
       throw new NotFoundException(ErrorAlbumMessages.ALBUM_NOT_FOUND);
     }
-
-    Object.assign(album, updateAlbumDto);
-    return album;
+    return this.db.album.update({
+      where: { id },
+      data: updateAlbumDto,
+    });
   }
 
   async deleteAlbum(id: string): Promise<void> {
     if (!isUuid(id)) {
       throw new BadRequestException(ErrorAlbumMessages.INVALID_ALBUM_ID_FORMAT);
     }
-    const index = this.albums.findIndex((album) => album.id === id);
-    if (index === -1) {
+    const album = await this.db.album.findUnique({ where: { id } });
+    if (!album) {
       throw new NotFoundException(ErrorAlbumMessages.ALBUM_NOT_FOUND);
     }
-    this.albums.splice(index, 1);
+    await this.db.album.delete({ where: { id } });
   }
 
   async resetArtisId(artistId: string): Promise<void> {
-    this.albums.forEach((album) => {
-      if (album.artistId === artistId) {
-        album.artistId = null;
-      }
+    await this.db.album.updateMany({
+      where: { artistId },
+      data: { artistId: null },
     });
   }
 
   async albumExists(id: string): Promise<boolean> {
-    const index = this.albums.findIndex((album) => album.id === id);
-    if (index === -1) {
-      return false;
-    }
-    return true;
+    const album = await this.db.album.findUnique({ where: { id } });
+    return !!album;
   }
 }

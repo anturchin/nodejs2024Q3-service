@@ -1,20 +1,21 @@
-import { v4 as uuidv4, validate as isUuid } from 'uuid';
+import { validate as isUuid } from 'uuid';
 import {
   BadRequestException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Artist } from './entities/artist.entity';
 import { ErrorArtistMessages } from '../common/constants/error-messages.constants';
 import { CreateArtistDto } from './dtos/create-artist.dto';
 import { UpdateArtistDto } from './dtos/update-artist.dto';
+import { Artist } from '@prisma/client';
+import { DatabaseService } from '../database/database.service';
 
 @Injectable()
 export class ArtistRepository {
-  private readonly artists: Artist[] = [];
+  constructor(private readonly db: DatabaseService) {}
 
   async getAllArtists(): Promise<Artist[]> {
-    return this.artists;
+    return this.db.artist.findMany();
   }
 
   async getArtistById(id: string): Promise<Artist> {
@@ -24,7 +25,7 @@ export class ArtistRepository {
       );
     }
 
-    const artist = this.artists.find((artist) => artist.id === id);
+    const artist = await this.db.artist.findUnique({ where: { id } });
     if (!artist) {
       throw new NotFoundException(ErrorArtistMessages.ARTIST_NOT_FOUND);
     }
@@ -32,11 +33,11 @@ export class ArtistRepository {
   }
 
   async createArtist(createArtistDto: CreateArtistDto): Promise<Artist> {
-    const newArtist: Artist = {
-      id: uuidv4(),
-      ...createArtistDto,
-    };
-    this.artists.push(newArtist);
+    const newArtist = await this.db.artist.create({
+      data: {
+        ...createArtistDto,
+      },
+    });
     return newArtist;
   }
 
@@ -49,14 +50,14 @@ export class ArtistRepository {
         ErrorArtistMessages.INVALID_ARTIST_ID_FORMAT,
       );
     }
-
-    const artist = this.artists.find((artist) => artist.id === id);
+    const artist = await this.db.artist.findUnique({ where: { id } });
     if (!artist) {
       throw new NotFoundException(ErrorArtistMessages.ARTIST_NOT_FOUND);
     }
-
-    Object.assign(artist, updateArtistDto);
-    return artist;
+    return this.db.artist.update({
+      where: { id },
+      data: updateArtistDto,
+    });
   }
 
   async deleteArtist(id: string): Promise<void> {
@@ -65,20 +66,15 @@ export class ArtistRepository {
         ErrorArtistMessages.INVALID_ARTIST_ID_FORMAT,
       );
     }
-
-    const index = this.artists.findIndex((artist) => artist.id === id);
-    if (index === -1) {
+    const artist = await this.db.artist.findUnique({ where: { id } });
+    if (!artist) {
       throw new NotFoundException(ErrorArtistMessages.ARTIST_NOT_FOUND);
     }
-
-    this.artists.splice(index, 1);
+    await this.db.artist.delete({ where: { id } });
   }
 
   async artistExists(id: string): Promise<boolean> {
-    const index = this.artists.findIndex((artis) => artis.id === id);
-    if (index === -1) {
-      return false;
-    }
-    return true;
+    const artist = await this.db.artist.findUnique({ where: { id } });
+    return !!artist;
   }
 }
