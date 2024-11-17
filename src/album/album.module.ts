@@ -4,9 +4,14 @@ import { AlbumService } from './album.service';
 import { AlbumRepository } from './album.repository';
 import { TrackModule } from '../track/track.module';
 import { FavoritesModule } from '../favorites/favorites.module';
+import { DatabaseModule } from '../database/database.module';
 
 @Module({
-  imports: [forwardRef(() => TrackModule), forwardRef(() => FavoritesModule)],
+  imports: [
+    forwardRef(() => TrackModule),
+    forwardRef(() => FavoritesModule),
+    DatabaseModule,
+  ],
   controllers: [AlbumController],
   providers: [AlbumService, AlbumRepository],
   exports: [AlbumService, AlbumRepository],
