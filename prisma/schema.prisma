@@ -48,10 +48,3 @@ model Album {
   artistId String?
   tracks   Track[]
 }
-
-model Favorites {
-  id      String   @id @default(uuid())
-  artists String[]
-  albums  String[]
-  tracks  String[]
-}
