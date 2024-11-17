@@ -1,72 +1,102 @@
 # Home Library Service
 
-## Prerequisites
+This project is a system for managing a home library, using NestJS for the server-side logic and Prisma for database interaction.
 
-- Git - [Download & Install Git](https://git-scm.com/downloads).
-- Node.js - [Download & Install Node.js](https://nodejs.org/en/download/) and the npm package manager.
 
-## Downloading
+## Requirements
 
-```
-git clone {repository URL}
-```
+- Docker
+- Node.js version 22
+- PostgreSQL
 
-## Installing NPM modules
+## Running the Project
 
-```
-npm install
-```
+The project uses Docker for local development. To run the project using Docker, follow these steps.
 
-## Running application
+### 1. Install Docker
 
-```
-npm start
-```
+If you don't have Docker installed, follow the [official Docker documentation](https://docs.docker.com/get-docker/) to install it.
 
-After starting the app on port (4000 as default) you can open
-in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
-For more information about OpenAPI/Swagger please visit https://swagger.io/.
+### 2. Set Up Environment Variables
 
-## Testing
+Create a .env file in the root of the project and add the following variables:
 
-After application running open new terminal and enter:
+```bash
+PORT=4000
 
-To run all tests without authorization
+CRYPT_SALT=10
+JWT_SECRET_KEY=secret123123
+JWT_SECRET_REFRESH_KEY=secret123123
+TOKEN_EXPIRE_TIME=1h
+TOKEN_REFRESH_EXPIRE_TIME=24h
 
-```
-npm run test
-```
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_DB=music_db
+POSTGRES_PORT=5432
+POSTGRES_HOST=postgres
 
-To run only one of all test suites
-
-```
-npm run test -- <path to suite>
+DATABASE_URL="postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}?schema=public"
 ```
 
-To run all test with authorization
+### 3. Running with Docker
+**1. Clone the repository:**
 
+```bash
+git clone git@github.com:anturchin/nodejs2024Q3-service.git
+cd nodejs2024Q3-service
 ```
-npm run test:auth
-```
+**2. Build and start the containers:**
 
-To run only specific test suite with authorization
-
-```
-npm run test:auth -- <path to suite>
-```
-
-### Auto-fix and format
-
-```
-npm run lint
+```bash
+docker-compose up --build
 ```
 
+Docker Compose will create and start two services:
+
+- `postgres:` the PostgreSQL database.
+- `app:` the main application server, which will run on port 4000.
+
+### 4. Stopping Docker Containers
+
+To stop the running containers, use the following command:
+
+```bash
+docker-compose down
 ```
-npm run format
+
+### Dockerfile Structure
+
+```bash
+FROM node:22-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm i
+
+COPY . .
+
+RUN npx prisma generate
+
+EXPOSE 4000
+
+CMD ["sh", "-c", "npx prisma migrate dev --name init && npm run start:dev"]
 ```
 
-### Debugging in VSCode
+### Scripts
 
-Press <kbd>F5</kbd> to debug.
+#### Common Running Scripts
 
-For more information, visit: https://code.visualstudio.com/docs/editor/debugging
+- `npm run start:` Starts the server in development mode.
+- `npm run start:dev:` Starts the server with auto-reload on file changes.
+- `npm run build:` Builds the project into the dist folder.
+- `npm run format:` Formats the code using Prettier.
+- `npm run lint:` Lints the code using ESLint.
+- `npm run test:` Runs tests with Jest.
+
+### Notes
+
+- Prisma ORM is used for database interaction. The database schema is generated using the command npx prisma generate.
+- Database migrations can be applied with the command npx prisma migrate dev.
