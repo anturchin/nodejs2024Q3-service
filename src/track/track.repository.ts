@@ -15,7 +15,7 @@ export class TrackRepository {
   constructor(private readonly db: DatabaseService) {}
 
   async getAllTracks(): Promise<Track[]> {
-    return await this.db.track.findMany();
+    return this.db.track.findMany();
   }
 
   async getTrackById(id: string): Promise<Track> {
@@ -31,7 +31,7 @@ export class TrackRepository {
   }
 
   async createTrack(createTrackDto: CreateTrackDto): Promise<Track> {
-    return await this.db.track.create({
+    return this.db.track.create({
       data: createTrackDto,
     });
   }
@@ -47,7 +47,7 @@ export class TrackRepository {
     if (!track) {
       throw new NotFoundException(ErrorTrackMessages.TRACK_NOT_FOUND);
     }
-    return await this.db.track.update({
+    return this.db.track.update({
       where: { id },
       data: updateTrackDto,
     });
