@@ -16,7 +16,7 @@ export class ErrorHandler {
 
   async handleError(error: unknown): Promise<void> {
     if (error instanceof HttpException) {
-      await this.loggingService.error(error.message, error.stack);
+      await this.loggingService.error(error.message);
     }
 
     if (error instanceof BadRequestException) {

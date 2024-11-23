@@ -34,15 +34,15 @@ export class LoggingService implements OnModuleInit {
   }
 
   async log(message: string): Promise<void> {
-    this.logger.log(LogLevel.INFO, message);
+    this.logger.log(message);
     await this.writeLog(LogLevel.INFO, message);
   }
-  async error(message: string, trace?: string): Promise<void> {
-    this.logger.error(LogLevel.ERROR, `${message}\n${trace || ''}`);
-    await this.writeLog(LogLevel.ERROR, `${message}\n${trace || ''}`);
+  async error(message: string): Promise<void> {
+    this.logger.error(message);
+    await this.writeLog(LogLevel.ERROR, `${message}`);
   }
   async warn(message: string): Promise<void> {
-    this.logger.warn(LogLevel.ERROR, message);
+    this.logger.warn(message);
     await this.writeLog(LogLevel.WARN, message);
   }
 
@@ -57,7 +57,7 @@ export class LoggingService implements OnModuleInit {
 
   private async writeLog(level: string, message: string): Promise<void> {
     const timestamp = new Date().toISOString();
-    const logMessage = `[${timestamp}] [${level}] ${message}\n\n\n`;
+    const logMessage = `[${timestamp}] [${level}] ${message}\n`;
 
     try {
       await this.rotateLogIfNeeded();
