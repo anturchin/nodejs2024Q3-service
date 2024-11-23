@@ -12,12 +12,15 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdatePasswordDto } from './dtos/update-password.dto';
-import { ErrorHandler } from '../../common/utils/error-handler.util';
 import { UserResponseDto } from './dtos/user-response.dto';
+import { ErrorHandler } from '../../error/error.handler';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly errorHandler: ErrorHandler,
+  ) {}
 
   @Get()
   @HttpCode(HttpStatus.OK)
@@ -31,7 +34,7 @@ export class UserController {
     try {
       return await this.userService.getUserById(id);
     } catch (error) {
-      ErrorHandler.handleError(error);
+      await this.errorHandler.handleError(error);
     }
   }
 
@@ -43,7 +46,7 @@ export class UserController {
     try {
       return await this.userService.createUser(createUserDto);
     } catch (error) {
-      ErrorHandler.handleError(error);
+      await this.errorHandler.handleError(error);
     }
   }
 
@@ -56,7 +59,7 @@ export class UserController {
     try {
       return await this.userService.updateUserPassword(id, updatePasswordDto);
     } catch (error) {
-      ErrorHandler.handleError(error);
+      await this.errorHandler.handleError(error);
     }
   }
 
@@ -66,7 +69,7 @@ export class UserController {
     try {
       await this.userService.deleteUser(id);
     } catch (error) {
-      ErrorHandler.handleError(error);
+      await this.errorHandler.handleError(error);
     }
   }
 }

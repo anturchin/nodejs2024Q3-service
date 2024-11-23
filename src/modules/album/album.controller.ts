@@ -11,13 +11,16 @@ import {
 } from '@nestjs/common';
 import { AlbumService } from './album.service';
 import { Album } from './entities/album.entity';
-import { ErrorHandler } from '../../common/utils/error-handler.util';
 import { CreateAlbumDto } from './dtos/create-album.dto';
 import { UpdateAlbumDto } from './dtos/update-album.dto';
+import { ErrorHandler } from '../../error/error.handler';
 
 @Controller('album')
 export class AlbumController {
-  constructor(private readonly albumService: AlbumService) {}
+  constructor(
+    private readonly albumService: AlbumService,
+    private readonly errorHandler: ErrorHandler,
+  ) {}
 
   @Get()
   @HttpCode(HttpStatus.OK)
@@ -25,7 +28,7 @@ export class AlbumController {
     try {
       return await this.albumService.getAllAlbums();
     } catch (error) {
-      ErrorHandler.handleError(error);
+      await this.errorHandler.handleError(error);
     }
   }
 
@@ -35,7 +38,7 @@ export class AlbumController {
     try {
       return await this.albumService.getAlbumById(id);
     } catch (error) {
-      ErrorHandler.handleError(error);
+      await this.errorHandler.handleError(error);
     }
   }
 
@@ -45,7 +48,7 @@ export class AlbumController {
     try {
       return await this.albumService.createAlbum(createAlbumDto);
     } catch (error) {
-      ErrorHandler.handleError(error);
+      await this.errorHandler.handleError(error);
     }
   }
 
@@ -58,7 +61,7 @@ export class AlbumController {
     try {
       return await this.albumService.updateAlbum(id, updateAlbum);
     } catch (error) {
-      ErrorHandler.handleError(error);
+      await this.errorHandler.handleError(error);
     }
   }
   @Delete(':id')
@@ -67,7 +70,7 @@ export class AlbumController {
     try {
       await this.albumService.deleteAlbum(id);
     } catch (error) {
-      ErrorHandler.handleError(error);
+      await this.errorHandler.handleError(error);
     }
   }
 }

@@ -3,12 +3,22 @@ import {
   ForbiddenException,
   NotFoundException,
   UnprocessableEntityException,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
-import { HttpException, HttpStatus } from '@nestjs/common';
-import { ErrorCommonMessage } from '../constants/error-messages.constants';
+import { Injectable } from '@nestjs/common';
+import { LoggingService } from '../logging/logging.service';
+import { ErrorCommonMessage } from '../common/constants/error-messages.constants';
 
+@Injectable()
 export class ErrorHandler {
-  static handleError(error: unknown): void {
+  constructor(private readonly loggingService: LoggingService) {}
+
+  async handleError(error: unknown): Promise<void> {
+    if (error instanceof HttpException) {
+      await this.loggingService.error(error.message, error.stack);
+    }
+
     if (error instanceof BadRequestException) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     } else if (error instanceof NotFoundException) {

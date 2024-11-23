@@ -6,6 +6,7 @@ import { TrackModule } from '../track/track.module';
 import { ArtistModule } from '../artist/artist.module';
 import { AlbumModule } from '../album/album.module';
 import { DatabaseModule } from '../../database/database.module';
+import { ErrorModule } from '../../error/error.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { DatabaseModule } from '../../database/database.module';
     forwardRef(() => ArtistModule),
     forwardRef(() => AlbumModule),
     DatabaseModule,
+    ErrorModule,
   ],
   controllers: [FavoritesController],
   providers: [FavoritesService, FavoritesRepository],

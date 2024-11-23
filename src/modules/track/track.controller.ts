@@ -11,13 +11,16 @@ import {
   Put,
 } from '@nestjs/common';
 import { Track } from './entities/track.entity';
-import { ErrorHandler } from '../../common/utils/error-handler.util';
 import { CreateTrackDto } from './dtos/create-track.dto';
 import { UpdateTrackDto } from './dtos/update-track.dto';
+import { ErrorHandler } from '../../error/error.handler';
 
 @Controller('track')
 export class TrackController {
-  constructor(private readonly trackService: TrackService) {}
+  constructor(
+    private readonly trackService: TrackService,
+    private readonly errorHandler: ErrorHandler,
+  ) {}
 
   @Get()
   @HttpCode(HttpStatus.OK)
@@ -25,7 +28,7 @@ export class TrackController {
     try {
       return await this.trackService.getAllTracks();
     } catch (error) {
-      ErrorHandler.handleError(error);
+      await this.errorHandler.handleError(error);
     }
   }
 
@@ -35,7 +38,7 @@ export class TrackController {
     try {
       return await this.trackService.getTrackById(id);
     } catch (error) {
-      ErrorHandler.handleError(error);
+      await this.errorHandler.handleError(error);
     }
   }
 
@@ -45,7 +48,7 @@ export class TrackController {
     try {
       return await this.trackService.createTrack(createTrackDto);
     } catch (error) {
-      ErrorHandler.handleError(error);
+      await this.errorHandler.handleError(error);
     }
   }
 
@@ -58,7 +61,7 @@ export class TrackController {
     try {
       return await this.trackService.updateTrack(id, updateTrackDto);
     } catch (error) {
-      ErrorHandler.handleError(error);
+      await this.errorHandler.handleError(error);
     }
   }
 
@@ -68,7 +71,7 @@ export class TrackController {
     try {
       await this.trackService.deleteTrack(id);
     } catch (error) {
-      ErrorHandler.handleError(error);
+      await this.errorHandler.handleError(error);
     }
   }
 }

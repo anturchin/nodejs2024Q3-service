@@ -9,11 +9,14 @@ import {
 } from '@nestjs/common';
 import { FavoritesService } from './favorites.service';
 import { FavoritesResponseDto } from './dtos/favorites-response.dto';
-import { ErrorHandler } from '../../common/utils/error-handler.util';
+import { ErrorHandler } from '../../error/error.handler';
 
 @Controller('favs')
 export class FavoritesController {
-  constructor(private readonly favoritesService: FavoritesService) {}
+  constructor(
+    private readonly favoritesService: FavoritesService,
+    private readonly errorHandler: ErrorHandler,
+  ) {}
 
   @Get()
   @HttpCode(HttpStatus.OK)
@@ -21,7 +24,7 @@ export class FavoritesController {
     try {
       return await this.favoritesService.getAllFavorites();
     } catch (error) {
-      ErrorHandler.handleError(error);
+      await this.errorHandler.handleError(error);
     }
   }
 
@@ -31,7 +34,7 @@ export class FavoritesController {
     try {
       await this.favoritesService.addTrackToFavorites(id);
     } catch (error) {
-      ErrorHandler.handleError(error);
+      await this.errorHandler.handleError(error);
     }
   }
 
@@ -41,7 +44,7 @@ export class FavoritesController {
     try {
       await this.favoritesService.removeTrackFromFavorites(id);
     } catch (error) {
-      ErrorHandler.handleError(error);
+      await this.errorHandler.handleError(error);
     }
   }
 
@@ -51,7 +54,7 @@ export class FavoritesController {
     try {
       await this.favoritesService.addAlbumToFavorites(id);
     } catch (error) {
-      ErrorHandler.handleError(error);
+      await this.errorHandler.handleError(error);
     }
   }
 
@@ -61,7 +64,7 @@ export class FavoritesController {
     try {
       await this.favoritesService.removeAlbumFromFavorites(id);
     } catch (error) {
-      ErrorHandler.handleError(error);
+      await this.errorHandler.handleError(error);
     }
   }
 
@@ -71,7 +74,7 @@ export class FavoritesController {
     try {
       await this.favoritesService.addArtistToFavorites(id);
     } catch (error) {
-      ErrorHandler.handleError(error);
+      await this.errorHandler.handleError(error);
     }
   }
 
@@ -81,7 +84,7 @@ export class FavoritesController {
     try {
       await this.favoritesService.removeArtistFromFavorites(id);
     } catch (error) {
-      ErrorHandler.handleError(error);
+      await this.errorHandler.handleError(error);
     }
   }
 }

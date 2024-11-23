@@ -1,0 +1,2 @@
+export const LOG_FILE_MAX_SIZE = 'LOG_FILE_MAX_SIZE';
+export const LOG_FILE_SIZE_DEFAULT = '1024';

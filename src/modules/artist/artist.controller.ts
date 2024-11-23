@@ -11,13 +11,16 @@ import {
 } from '@nestjs/common';
 import { ArtistService } from './artist.service';
 import { Artist } from './entities/artist.entity';
-import { ErrorHandler } from '../../common/utils/error-handler.util';
 import { CreateArtistDto } from './dtos/create-artist.dto';
 import { UpdateArtistDto } from './dtos/update-artist.dto';
+import { ErrorHandler } from '../../error/error.handler';
 
 @Controller('artist')
 export class ArtistController {
-  constructor(private readonly artistService: ArtistService) {}
+  constructor(
+    private readonly artistService: ArtistService,
+    private readonly errorHandler: ErrorHandler,
+  ) {}
 
   @Get()
   @HttpCode(HttpStatus.OK)
@@ -25,7 +28,7 @@ export class ArtistController {
     try {
       return await this.artistService.getAllArtists();
     } catch (error) {
-      ErrorHandler.handleError(error);
+      await this.errorHandler.handleError(error);
     }
   }
 
@@ -35,7 +38,7 @@ export class ArtistController {
     try {
       return await this.artistService.getArtistById(id);
     } catch (error) {
-      ErrorHandler.handleError(error);
+      await this.errorHandler.handleError(error);
     }
   }
 
@@ -47,7 +50,7 @@ export class ArtistController {
     try {
       return await this.artistService.createArtist(createArtistDto);
     } catch (error) {
-      ErrorHandler.handleError(error);
+      await this.errorHandler.handleError(error);
     }
   }
 
@@ -60,7 +63,7 @@ export class ArtistController {
     try {
       return await this.artistService.updateArtist(id, updateArtistDto);
     } catch (error) {
-      ErrorHandler.handleError(error);
+      await this.errorHandler.handleError(error);
     }
   }
 
@@ -70,7 +73,7 @@ export class ArtistController {
     try {
       await this.artistService.deleteArtist(id);
     } catch (error) {
-      ErrorHandler.handleError(error);
+      await this.errorHandler.handleError(error);
     }
   }
 }
