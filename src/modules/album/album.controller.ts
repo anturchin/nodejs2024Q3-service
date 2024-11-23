@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { AlbumService } from './album.service';
 import { Album } from './entities/album.entity';
-import { ErrorHandler } from '../common/utils/error-handler.util';
+import { ErrorHandler } from '../../common/utils/error-handler.util';
 import { CreateAlbumDto } from './dtos/create-album.dto';
 import { UpdateAlbumDto } from './dtos/update-album.dto';
 

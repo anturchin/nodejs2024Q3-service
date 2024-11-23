@@ -11,7 +11,7 @@ import {
   Put,
 } from '@nestjs/common';
 import { Track } from './entities/track.entity';
-import { ErrorHandler } from '../common/utils/error-handler.util';
+import { ErrorHandler } from '../../common/utils/error-handler.util';
 import { CreateTrackDto } from './dtos/create-track.dto';
 import { UpdateTrackDto } from './dtos/update-track.dto';
 

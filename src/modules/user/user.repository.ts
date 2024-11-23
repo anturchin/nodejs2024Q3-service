@@ -8,9 +8,9 @@ import {
 } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdatePasswordDto } from './dtos/update-password.dto';
-import { ErrorUserMessages } from '../common/constants/error-messages.constants';
+import { ErrorUserMessages } from '../../common/constants/error-messages.constants';
 import { User } from '@prisma/client';
-import { DatabaseService } from '../database/database.service';
+import { DatabaseService } from '../../database/database.service';
 
 @Injectable()
 export class UserRepository {

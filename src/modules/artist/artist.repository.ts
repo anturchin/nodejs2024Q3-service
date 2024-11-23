@@ -4,11 +4,11 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { ErrorArtistMessages } from '../common/constants/error-messages.constants';
+import { ErrorArtistMessages } from '../../common/constants/error-messages.constants';
 import { CreateArtistDto } from './dtos/create-artist.dto';
 import { UpdateArtistDto } from './dtos/update-artist.dto';
 import { Artist } from '@prisma/client';
-import { DatabaseService } from '../database/database.service';
+import { DatabaseService } from '../../database/database.service';
 
 @Injectable()
 export class ArtistRepository {

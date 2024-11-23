@@ -12,7 +12,7 @@ import {
   ErrorArtistMessages,
   ErrorFavoritesMessages,
   ErrorTrackMessages,
-} from '../common/constants/error-messages.constants';
+} from '../../common/constants/error-messages.constants';
 import { TrackRepository } from '../track/track.repository';
 import { AlbumRepository } from '../album/album.repository';
 import { ArtistRepository } from '../artist/artist.repository';

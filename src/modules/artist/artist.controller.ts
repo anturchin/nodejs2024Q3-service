@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { ArtistService } from './artist.service';
 import { Artist } from './entities/artist.entity';
-import { ErrorHandler } from '../common/utils/error-handler.util';
+import { ErrorHandler } from '../../common/utils/error-handler.util';
 import { CreateArtistDto } from './dtos/create-artist.dto';
 import { UpdateArtistDto } from './dtos/update-artist.dto';
 
