@@ -18,6 +18,7 @@ import { JwtPayload } from './auth.interface';
 import { UserResponseDto } from '../user/dtos/user-response.dto';
 import { LoginDto } from './dtos/login.dto';
 import { LoginResponseDto } from './dtos/login-response.dto';
+import { RefreshTokenDto } from './dtos/refresh.dto';
 
 @Injectable()
 export class AuthService {
@@ -57,6 +58,34 @@ export class AuthService {
       expiresIn: this.configService.get<string>(TOKEN_REFRESH_EXPIRE_TIME),
     });
     return { id: user.id, accessToken, refreshToken };
+  }
+
+  async refresh({
+    refreshToken: old,
+  }: RefreshTokenDto): Promise<LoginResponseDto> {
+    let payload: JwtPayload;
+    try {
+      payload = await this.jwtService.verifyAsync(old, {
+        secret: this.configService.get<string>(JWT_SECRET_REFRESH_KEY),
+        ignoreExpiration: false,
+      });
+    } catch {
+      throw new ForbiddenException('Invalid refresh token');
+    }
+    const accessToken = await this.jwtService.signAsync(
+      { userId: payload.userId, login: payload.login },
+      {
+        expiresIn: this.configService.get<string>(TOKEN_EXPIRE_TIME),
+      },
+    );
+    const refreshToken = await this.jwtService.signAsync(
+      { userId: payload.userId, login: payload.login },
+      {
+        secret: this.configService.get<string>(JWT_SECRET_REFRESH_KEY),
+        expiresIn: this.configService.get<string>(TOKEN_REFRESH_EXPIRE_TIME),
+      },
+    );
+    return { id: payload.userId, accessToken, refreshToken };
   }
 
   async findUser({ userId }: JwtPayload): Promise<UserResponseDto> {
