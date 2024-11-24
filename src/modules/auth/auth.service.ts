@@ -12,7 +12,7 @@ export class AuthService {
     private readonly configService: ConfigService,
   ) {}
 
-  async createUser({ login, password }: SignupDto): Promise<void> {
+  async signup({ login, password }: SignupDto): Promise<void> {
     const hashedPassword = await this.hashPassword({ password });
     await this.userService.createUser({
       login,
@@ -25,7 +25,7 @@ export class AuthService {
   }: {
     password: string;
   }): Promise<string> {
-    const salt = this.configService.get<string>(CRYPT_SALT);
+    const salt = parseInt(this.configService.get<string>(CRYPT_SALT), 10);
     return await bcrypt.hash(password, salt);
   }
 

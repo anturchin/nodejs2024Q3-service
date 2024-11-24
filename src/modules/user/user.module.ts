@@ -9,5 +9,6 @@ import { ErrorModule } from '../../shared/error/error.module';
   imports: [DatabaseModule, ErrorModule],
   controllers: [UserController],
   providers: [UserRepository, UserService],
+  exports: [UserService],
 })
 export class UserModule {}

@@ -16,7 +16,7 @@ export class AuthController {
   @HttpCode(HttpStatus.CREATED)
   async signup(@Body() body: SignupDto): Promise<void> {
     try {
-      await this.authService.createUser(body);
+      await this.authService.signup(body);
     } catch (error) {
       await this.errorHandler.handleError(error);
     }
