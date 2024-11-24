@@ -1,31 +1,30 @@
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { ConsoleLogger, Injectable, OnModuleInit } from '@nestjs/common';
+import { access } from 'node:fs/promises';
+import * as constants from 'node:constants';
 import * as fs from 'fs/promises';
+import * as dotenv from 'dotenv';
 import * as path from 'path';
 import { LogLevel } from '../types';
 import {
-  LOG_FILE_MAX_SIZE,
   LOG_FILE_SIZE_DEFAULT,
+  MAX_LOG_FILE_AGE_DAYS,
+  MS_IN_A_DAY,
 } from '../constants/logging.constants';
 
+dotenv.config();
+
 @Injectable()
-export class LoggingService implements OnModuleInit {
-  private readonly logger: Logger = new Logger(LoggingService.name);
-  private readonly logDirectory: string = path.resolve(
-    __dirname,
-    '..',
-    '..',
-    '..',
-    'logs',
-  );
+export class LoggingService extends ConsoleLogger implements OnModuleInit {
+  private readonly logDirectory: string;
   private readonly logFilePath: string;
   private readonly maxFileSizeKB: number;
 
-  constructor(private readonly configService: ConfigService) {
+  constructor() {
+    super(LoggingService.name);
+    this.logDirectory = path.resolve(__dirname, '..', '..', '..', 'logs');
     this.logFilePath = path.join(this.logDirectory, 'app.log');
     this.maxFileSizeKB = parseInt(
-      this.configService.get<string>(LOG_FILE_MAX_SIZE) ||
-        LOG_FILE_SIZE_DEFAULT,
+      process.env.LOG_FILE_MAX_SIZE || LOG_FILE_SIZE_DEFAULT,
       10,
     );
   }
@@ -35,24 +34,24 @@ export class LoggingService implements OnModuleInit {
   }
 
   async log(message: string): Promise<void> {
-    this.logger.log(message);
+    super.log(message);
     await this.writeLog(LogLevel.INFO, message);
   }
   async error(message: string): Promise<void> {
-    this.logger.error(message);
+    super.error(message);
     await this.writeLog(LogLevel.ERROR, `${message}`);
   }
   async warn(message: string): Promise<void> {
-    this.logger.warn(message);
+    super.warn(message);
     await this.writeLog(LogLevel.WARN, message);
   }
 
   private async ensureLogDirectory(): Promise<void> {
     try {
       await fs.mkdir(this.logDirectory, { recursive: true });
-      this.logger.log('Create log directory: ' + this.logDirectory);
-    } catch (err) {
-      this.logger.error('Failed to create log directory:', err.message);
+      super.log('Create log directory: ' + this.logDirectory);
+    } catch (error) {
+      super.error('Failed to create log directory:', error.message);
     }
   }
 
@@ -63,8 +62,8 @@ export class LoggingService implements OnModuleInit {
     try {
       await this.rotateLogIfNeeded();
       await fs.appendFile(this.logFilePath, logMessage);
-    } catch (err) {
-      this.logger.error('Failed to write log:', err.message);
+    } catch (error) {
+      super.error('Failed to write log:', error.message);
     }
   }
 
@@ -84,8 +83,8 @@ export class LoggingService implements OnModuleInit {
       }
 
       await this.removeOldLogFiles();
-    } catch (err) {
-      this.logger.error('Failed to rotate log file:', err.message);
+    } catch (error) {
+      super.error('Failed to rotate log file:', error.message);
     }
   }
 
@@ -98,22 +97,22 @@ export class LoggingService implements OnModuleInit {
         const stats = await fs.stat(filePath);
 
         const fileModificationDate = stats.mtime;
-        const diffInMS = now.getTime() - fileModificationDate.getTime();
-        const diffInDays = diffInMS / (1000 * 3600 * 24);
+        const diffInDays =
+          (now.getTime() - fileModificationDate.getTime()) / MS_IN_A_DAY;
 
-        if (diffInDays > 1) {
+        if (diffInDays > MAX_LOG_FILE_AGE_DAYS) {
           await fs.unlink(filePath);
-          this.logger.log(`Deleted old log file: ${file}`);
+          super.log(`Deleted old log file: ${file}`);
         }
       }
-    } catch (err) {
-      this.logger.error('Failed to remove old log files:', err.message);
+    } catch (error) {
+      super.error('Failed to remove old log files:', error.message);
     }
   }
 
   private async fileExists(filePath: string): Promise<boolean> {
     try {
-      await fs.access(filePath);
+      await access(filePath, constants.R_OK | constants.W_OK);
       return true;
     } catch {
       return false;

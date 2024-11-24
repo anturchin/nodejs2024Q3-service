@@ -4,9 +4,12 @@ import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
 import { DatabaseService } from './database/database.service';
 import { LoggingService } from './shared/logging/logging.service';
+import { registerGlobalErrorHandlers } from './shared/error/error-handler';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: new LoggingService(),
+  });
 
   app.useGlobalPipes(new ValidationPipe());
 
@@ -14,23 +17,7 @@ async function bootstrap() {
   const loggingService = app.get(LoggingService);
   await databaseService.enableShutdownHooks(app);
 
-  process.on('uncaughtException', (error) => {
-    loggingService.error(
-      JSON.stringify({
-        message: 'Uncaught exception',
-        exception: error,
-      }),
-    );
-  });
-
-  process.on('unhandledRejection', (reason) => {
-    loggingService.error(
-      JSON.stringify({
-        message: 'Unhandled promise rejection',
-        exception: reason,
-      }),
-    );
-  });
+  registerGlobalErrorHandlers(loggingService);
 
   const configService = app.get(ConfigService);
   const port = configService.get<number>('PORT') || 4000;
