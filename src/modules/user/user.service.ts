@@ -23,6 +23,10 @@ export class UserService {
     return usersWithoutPassword;
   }
 
+  async getUserByEmail(login: string): Promise<User> {
+    return await this.userRepository.getUserByEmail(login);
+  }
+
   async getUserById(id: string): Promise<UserResponseDto> {
     const {
       id: userId,

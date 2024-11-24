@@ -30,6 +30,7 @@ services:
       - "4000:4000"
     volumes:
       - ./src:/app/src
+      - ./logs:/app/logs
 
 networks:
   app-network:

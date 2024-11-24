@@ -15,6 +15,7 @@ export class LoggingService implements OnModuleInit {
     __dirname,
     '..',
     '..',
+    '..',
     'logs',
   );
   private readonly logFilePath: string;

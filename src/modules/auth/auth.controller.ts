@@ -4,6 +4,7 @@ import { LoginDto } from './dtos/login.dto';
 import { RefreshTokenDto } from './dtos/refresh.dto';
 import { AuthService } from './auth.service';
 import { ErrorHandler } from '../../shared/error/error.handler';
+import { LoginResponseDto } from './dtos/login-response.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -24,9 +25,9 @@ export class AuthController {
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  async login(@Body() body: LoginDto) {
+  async login(@Body() body: LoginDto): Promise<LoginResponseDto> {
     try {
-      console.log(body);
+      return await this.authService.login(body);
     } catch (error) {
       await this.errorHandler.handleError(error);
     }

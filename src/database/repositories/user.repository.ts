@@ -20,6 +20,11 @@ export class UserRepository {
     return this.db.user.findMany();
   }
 
+  async getUserByEmail(login: string): Promise<User> {
+    const user = await this.db.user.findFirst({ where: { login } });
+    return user;
+  }
+
   async getUserById(id: string): Promise<User> {
     if (!isUuid(id)) {
       throw new BadRequestException(ErrorUserMessages.INVALID_USER_ID_FORMAT);
