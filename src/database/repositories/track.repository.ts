@@ -4,11 +4,11 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { ErrorTrackMessages } from '../../common/constants/error-messages.constants';
-import { CreateTrackDto } from './dtos/create-track.dto';
-import { UpdateTrackDto } from './dtos/update-track.dto';
+import { ErrorTrackMessages } from '../../shared/constants/error-messages.constants';
+import { CreateTrackDto } from '../../modules/track/dtos/create-track.dto';
+import { UpdateTrackDto } from '../../modules/track/dtos/update-track.dto';
 import { Track } from '@prisma/client';
-import { DatabaseService } from '../../database/database.service';
+import { DatabaseService } from '../database.service';
 
 @Injectable()
 export class TrackRepository {

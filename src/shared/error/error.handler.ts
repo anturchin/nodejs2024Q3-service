@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
 import { LoggingService } from '../logging/logging.service';
-import { ErrorCommonMessage } from '../common/constants/error-messages.constants';
+import { ErrorCommonMessage } from '../constants/error-messages.constants';
 
 @Injectable()
 export class ErrorHandler {

@@ -5,17 +5,17 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { Favorites } from './entities/favorite.entity';
-import { FavoritesResponseDto } from './dtos/favorites-response.dto';
+import { Favorites } from '../../modules/favorites/entities/favorite.entity';
+import { FavoritesResponseDto } from '../../modules/favorites/dtos/favorites-response.dto';
 import {
   ErrorAlbumMessages,
   ErrorArtistMessages,
   ErrorFavoritesMessages,
   ErrorTrackMessages,
-} from '../../common/constants/error-messages.constants';
-import { TrackRepository } from '../track/track.repository';
-import { AlbumRepository } from '../album/album.repository';
-import { ArtistRepository } from '../artist/artist.repository';
+} from '../../shared/constants/error-messages.constants';
+import { TrackRepository } from './track.repository';
+import { AlbumRepository } from './album.repository';
+import { ArtistRepository } from './artist.repository';
 
 @Injectable()
 export class FavoritesRepository {

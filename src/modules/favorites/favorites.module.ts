@@ -1,12 +1,12 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { FavoritesController } from './favorites.controller';
 import { FavoritesService } from './favorites.service';
-import { FavoritesRepository } from './favorites.repository';
+import { FavoritesRepository } from '../../database/repositories/favorites.repository';
 import { TrackModule } from '../track/track.module';
 import { ArtistModule } from '../artist/artist.module';
 import { AlbumModule } from '../album/album.module';
 import { DatabaseModule } from '../../database/database.module';
-import { ErrorModule } from '../../error/error.module';
+import { ErrorModule } from '../../shared/error/error.module';
 
 @Module({
   imports: [

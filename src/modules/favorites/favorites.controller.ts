@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { FavoritesService } from './favorites.service';
 import { FavoritesResponseDto } from './dtos/favorites-response.dto';
-import { ErrorHandler } from '../../error/error.handler';
+import { ErrorHandler } from '../../shared/error/error.handler';
 
 @Controller('favs')
 export class FavoritesController {

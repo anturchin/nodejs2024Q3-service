@@ -13,7 +13,7 @@ import {
 import { Track } from './entities/track.entity';
 import { CreateTrackDto } from './dtos/create-track.dto';
 import { UpdateTrackDto } from './dtos/update-track.dto';
-import { ErrorHandler } from '../../error/error.handler';
+import { ErrorHandler } from '../../shared/error/error.handler';
 
 @Controller('track')
 export class TrackController {

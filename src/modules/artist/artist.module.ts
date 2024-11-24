@@ -3,10 +3,10 @@ import { ArtistController } from './artist.controller';
 import { ArtistService } from './artist.service';
 import { TrackModule } from '../track/track.module';
 import { AlbumModule } from '../album/album.module';
-import { ArtistRepository } from './artist.repository';
+import { ArtistRepository } from '../../database/repositories/artist.repository';
 import { FavoritesModule } from '../favorites/favorites.module';
 import { DatabaseModule } from '../../database/database.module';
-import { ErrorModule } from '../../error/error.module';
+import { ErrorModule } from '../../shared/error/error.module';
 
 @Module({
   imports: [

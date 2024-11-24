@@ -4,11 +4,11 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { ErrorAlbumMessages } from '../../common/constants/error-messages.constants';
-import { CreateAlbumDto } from './dtos/create-album.dto';
-import { UpdateAlbumDto } from './dtos/update-album.dto';
+import { ErrorAlbumMessages } from '../../shared/constants/error-messages.constants';
+import { CreateAlbumDto } from '../../modules/album/dtos/create-album.dto';
+import { UpdateAlbumDto } from '../../modules/album/dtos/update-album.dto';
 import { Album } from '@prisma/client';
-import { DatabaseService } from '../../database/database.service';
+import { DatabaseService } from '../database.service';
 
 @Injectable()
 export class AlbumRepository {

@@ -13,7 +13,7 @@ import { ArtistService } from './artist.service';
 import { Artist } from './entities/artist.entity';
 import { CreateArtistDto } from './dtos/create-artist.dto';
 import { UpdateArtistDto } from './dtos/update-artist.dto';
-import { ErrorHandler } from '../../error/error.handler';
+import { ErrorHandler } from '../../shared/error/error.handler';
 
 @Controller('artist')
 export class ArtistController {

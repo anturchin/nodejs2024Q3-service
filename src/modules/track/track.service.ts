@@ -1,4 +1,4 @@
-import { TrackRepository } from './track.repository';
+import { TrackRepository } from '../../database/repositories/track.repository';
 import { Track } from './entities/track.entity';
 import { CreateTrackDto } from './dtos/create-track.dto';
 import { UpdateTrackDto } from './dtos/update-track.dto';

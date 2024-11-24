@@ -1,11 +1,11 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { AlbumController } from './album.controller';
 import { AlbumService } from './album.service';
-import { AlbumRepository } from './album.repository';
+import { AlbumRepository } from '../../database/repositories/album.repository';
 import { TrackModule } from '../track/track.module';
 import { FavoritesModule } from '../favorites/favorites.module';
 import { DatabaseModule } from '../../database/database.module';
-import { ErrorModule } from '../../error/error.module';
+import { ErrorModule } from '../../shared/error/error.module';
 
 @Module({
   imports: [

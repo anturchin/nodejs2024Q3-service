@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { FavoritesRepository } from './favorites.repository';
+import { FavoritesRepository } from '../../database/repositories/favorites.repository';
 import { Favorites } from './entities/favorite.entity';
 import { FavoritesResponseDto } from './dtos/favorites-response.dto';
 

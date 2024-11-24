@@ -6,11 +6,11 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateUserDto } from './dtos/create-user.dto';
-import { UpdatePasswordDto } from './dtos/update-password.dto';
-import { ErrorUserMessages } from '../../common/constants/error-messages.constants';
+import { CreateUserDto } from '../../modules/user/dtos/create-user.dto';
+import { UpdatePasswordDto } from '../../modules/user/dtos/update-password.dto';
+import { ErrorUserMessages } from '../../shared/constants/error-messages.constants';
 import { User } from '@prisma/client';
-import { DatabaseService } from '../../database/database.service';
+import { DatabaseService } from '../database.service';
 
 @Injectable()
 export class UserRepository {

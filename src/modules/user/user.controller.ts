@@ -13,7 +13,7 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdatePasswordDto } from './dtos/update-password.dto';
 import { UserResponseDto } from './dtos/user-response.dto';
-import { ErrorHandler } from '../../error/error.handler';
+import { ErrorHandler } from '../../shared/error/error.handler';
 
 @Controller('user')
 export class UserController {

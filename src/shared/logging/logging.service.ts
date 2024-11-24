@@ -2,11 +2,11 @@ import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as fs from 'fs/promises';
 import * as path from 'path';
-import { LogLevel } from '../common/types';
+import { LogLevel } from '../types';
 import {
   LOG_FILE_MAX_SIZE,
   LOG_FILE_SIZE_DEFAULT,
-} from '../common/constants/logging.constants';
+} from '../constants/logging.constants';
 
 @Injectable()
 export class LoggingService implements OnModuleInit {
