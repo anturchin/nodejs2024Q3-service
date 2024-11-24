@@ -7,6 +7,7 @@ import { ErrorModule } from '../../shared/error/error.module';
 import { JwtModule } from '@nestjs/jwt';
 import { JWT_SECRET_KEY, TOKEN_EXPIRE_TIME } from './constants/auth.constants';
 import { PassportModule } from '@nestjs/passport';
+import { JwtStrategy } from './strategies/jwt.strategy';
 
 @Module({
   imports: [
@@ -23,7 +24,7 @@ import { PassportModule } from '@nestjs/passport';
       }),
     }),
   ],
-  providers: [AuthService],
+  providers: [AuthService, JwtStrategy],
   controllers: [AuthController],
 })
 export class AuthModule {}

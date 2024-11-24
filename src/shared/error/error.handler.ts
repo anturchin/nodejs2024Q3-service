@@ -5,6 +5,7 @@ import {
   UnprocessableEntityException,
   HttpException,
   HttpStatus,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
 import { LoggingService } from '../logging/logging.service';
@@ -27,6 +28,8 @@ export class ErrorHandler {
       throw new HttpException(error.message, HttpStatus.FORBIDDEN);
     } else if (error instanceof UnprocessableEntityException) {
       throw new HttpException(error.message, HttpStatus.UNPROCESSABLE_ENTITY);
+    } else if (error instanceof UnauthorizedException) {
+      throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
     } else {
       throw new HttpException(
         ErrorCommonMessage.INTERNET_SERVER_ERROR,

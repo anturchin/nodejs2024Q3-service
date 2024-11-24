@@ -27,12 +27,13 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async signup({ login, password }: SignupDto): Promise<void> {
+  async signup({ login, password }: SignupDto): Promise<LoginResponseDto> {
     const hashedPassword = await this.hashPassword({ password });
     await this.userService.createUser({
       login,
       password: hashedPassword,
     });
+    return this.login({ login, password });
   }
 
   async login({ login, password }: LoginDto): Promise<LoginResponseDto> {
@@ -55,7 +56,7 @@ export class AuthService {
       secret: this.configService.get<string>(JWT_SECRET_REFRESH_KEY),
       expiresIn: this.configService.get<string>(TOKEN_REFRESH_EXPIRE_TIME),
     });
-    return { accessToken, refreshToken };
+    return { id: user.id, accessToken, refreshToken };
   }
 
   async findUser({ userId }: JwtPayload): Promise<UserResponseDto> {
