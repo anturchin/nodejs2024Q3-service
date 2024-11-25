@@ -14,7 +14,7 @@ import { AlbumService } from './album.service';
 import { Album } from './entities/album.entity';
 import { CreateAlbumDto } from './dtos/create-album.dto';
 import { UpdateAlbumDto } from './dtos/update-album.dto';
-import { ErrorHandler } from '../../shared/error/error.handler';
+import { ErrorHandler } from '../../common/error/error.handler';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 
 @UseGuards(JwtAuthGuard)

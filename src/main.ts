@@ -3,18 +3,18 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
 import { DatabaseService } from './database/database.service';
-import { LoggingService } from './shared/logging/logging.service';
-import { registerGlobalErrorHandlers } from './shared/error/error-handler';
+import { LoggingService } from './common/logging/logging.service';
+import { registerGlobalErrorHandlers } from './common/error/error-handler';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    logger: new LoggingService(),
+    bufferLogs: true,
   });
-
+  const loggingService = app.get(LoggingService);
+  app.useLogger(loggingService);
   app.useGlobalPipes(new ValidationPipe());
 
   const databaseService = app.get(DatabaseService);
-  const loggingService = app.get(LoggingService);
   await databaseService.enableShutdownHooks(app);
 
   registerGlobalErrorHandlers(loggingService);

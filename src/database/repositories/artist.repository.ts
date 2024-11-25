@@ -4,7 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { ErrorArtistMessages } from '../../shared/constants/error-messages.constants';
+import { ErrorArtistMessages } from '../../common/constants/error-messages.constants';
 import { CreateArtistDto } from '../../modules/artist/dtos/create-artist.dto';
 import { UpdateArtistDto } from '../../modules/artist/dtos/update-artist.dto';
 import { Artist } from '@prisma/client';

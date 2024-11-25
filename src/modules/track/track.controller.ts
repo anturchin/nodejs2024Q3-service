@@ -14,7 +14,7 @@ import {
 import { Track } from './entities/track.entity';
 import { CreateTrackDto } from './dtos/create-track.dto';
 import { UpdateTrackDto } from './dtos/update-track.dto';
-import { ErrorHandler } from '../../shared/error/error.handler';
+import { ErrorHandler } from '../../common/error/error.handler';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 
 @UseGuards(JwtAuthGuard)

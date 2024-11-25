@@ -10,7 +10,7 @@ import { SignupDto } from './dtos/signup.dto';
 import { LoginDto } from './dtos/login.dto';
 import { RefreshTokenDto } from './dtos/refresh.dto';
 import { AuthService } from './auth.service';
-import { ErrorHandler } from '../../shared/error/error.handler';
+import { ErrorHandler } from '../../common/error/error.handler';
 import { LoginResponseDto } from './dtos/login-response.dto';
 
 @Controller('auth')

@@ -3,7 +3,7 @@ import { UserModule } from '../user/user.module';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { ConfigService } from '@nestjs/config';
-import { ErrorModule } from '../../shared/error/error.module';
+import { ErrorModule } from '../../common/error/error.module';
 import { JwtModule } from '@nestjs/jwt';
 import { JWT_SECRET_KEY, TOKEN_EXPIRE_TIME } from './constants/auth.constants';
 import { PassportModule } from '@nestjs/passport';

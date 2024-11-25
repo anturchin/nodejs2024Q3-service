@@ -5,7 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { ArtistModule } from './modules/artist/artist.module';
 import { CustomExceptionFilter } from './common/filters/custom-exception.filter';
 import { APP_FILTER } from '@nestjs/core';
-import { LoggingModule } from './shared/logging/logging.module';
+import { LoggingModule } from './common/logging/logging.module';
 import { AuthModule } from './modules/auth/auth.module';
 
 @Module({

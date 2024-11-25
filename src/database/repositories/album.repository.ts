@@ -4,7 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { ErrorAlbumMessages } from '../../shared/constants/error-messages.constants';
+import { ErrorAlbumMessages } from '../../common/constants/error-messages.constants';
 import { CreateAlbumDto } from '../../modules/album/dtos/create-album.dto';
 import { UpdateAlbumDto } from '../../modules/album/dtos/update-album.dto';
 import { Album } from '@prisma/client';

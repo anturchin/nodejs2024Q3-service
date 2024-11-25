@@ -4,7 +4,7 @@ import { TrackService } from './track.service';
 import { TrackRepository } from '../../database/repositories/track.repository';
 import { FavoritesModule } from '../favorites/favorites.module';
 import { DatabaseModule } from '../../database/database.module';
-import { ErrorModule } from '../../shared/error/error.module';
+import { ErrorModule } from '../../common/error/error.module';
 
 @Module({
   imports: [forwardRef(() => FavoritesModule), DatabaseModule, ErrorModule],
